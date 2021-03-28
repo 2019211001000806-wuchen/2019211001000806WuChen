@@ -3,6 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+      <context-param>
+            <param-name>driver</param-name>
+            <param-value>com.microsoft.sqlserver.jdbc.SQLServerDriver</param-value>
+      </context-param>
+      <context-param>
+            <param-name>url</param-name>
+            <param-value>jdbc:sqlserver://localhost:1433;DatabaseName=userdb</param-value>
+      </context-param>
+      <context-param>
+            <param-name>username</param-name>
+            <param-value>sa</param-value>
+      </context-param>
+      <context-param>
+            <param-name>password</param-name>
+            <param-value>1339157058</param-value>
+      </context-param>
+      <!--
       <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>com.wuchen.week3.demo.RegisterServlet</servlet-class>
@@ -11,4 +28,24 @@
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
+    -->
+    <!--
+    <servlet>
+        <servlet-name>ConfigDemoServlet</servlet-name>
+        <servlet-class>com.wuchen.week4.demo.ConfigDemoServlet</servlet-class>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>wuchen</param-value>
+        </init-param>
+        <init-param>
+            <param-name>studentid</param-name>
+            <param-value>2019211001000806</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConfigDemoServlet</servlet-name>
+        <url-pattern>/config</url-pattern>
+    </servlet-mapping>
+    -->
 </web-app>
