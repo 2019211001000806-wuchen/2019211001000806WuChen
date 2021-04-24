@@ -3,8 +3,7 @@ package com.wuchen.week5.demo;
 import com.wuchen.dao.UserDao;
 import com.wuchen.model.User;
 
-import javax.jws.soap.SOAPBinding;
-import javax.naming.Context;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -39,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-doPost(request,response);
+
         request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
     }
 
@@ -49,17 +48,34 @@ doPost(request,response);
         String password= request.getParameter("password");
         PrintWriter out=response.getWriter();
         UserDao userdao=new UserDao();
+        User user= null;
         try {
-            User user=userdao.findByUsernamePassword(con,username,password);
-            if(user!=null){
-                request.setAttribute("user",user);
-                request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
-            }else{
-                request.setAttribute("message","Username or Password Error!!!");
-                request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
-            }
+            user = userdao.findByUsernamePassword(con,username,password);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+
+        if(user!=null){
+            String rememberMe=request.getParameter("rememberMe");
+            if(rememberMe!=null && rememberMe.equals("1")){
+                Cookie usernameCookie=new Cookie("cUsername",user.getUsername());
+                Cookie passwordCookie=new Cookie("cPassword",user.getPassword());
+                Cookie rememberMeCookie=new Cookie("cRememberMe",request.getParameter("rememberMe"));
+                usernameCookie.setMaxAge(5);
+                passwordCookie.setMaxAge(5);
+                rememberMeCookie.setMaxAge(5);
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+                response.addCookie(rememberMeCookie);
+            }
+            HttpSession session=request.getSession();
+            System.out.println("session id-->"+session.getId());
+            session.setMaxInactiveInterval(10);
+            session.setAttribute("user",user);
+            request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
+        }else{
+            request.setAttribute("message","Username or Password Error!!!");
+            request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
         }
 
     }
