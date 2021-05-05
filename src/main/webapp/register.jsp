@@ -8,7 +8,7 @@
 <%@include file="header.jsp"%>
 This is my register JSP page.<br>
 <form method="post" action="register">
-    Username:<input type="text" name="Username"><br>
+    Username:<input type="text" name="Username" ><br>
     Password:<input type="password" name="Password"><br>
     Email:<input type="text" name="Email"><br>
     Gender:<input type="radio" value="Male">Male

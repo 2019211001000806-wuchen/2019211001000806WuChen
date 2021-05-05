@@ -62,12 +62,13 @@ public class User {
         this.gender = gender;
     }
 
-    public java.sql.Date getBirthDate() {
-        return (java.sql.Date) birthDate;
+    public  Date getBirthDate() {
+        return birthDate;
     }
 
     public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+
+        this.birthDate =  birthDate;
     }
 
     @Override
@@ -80,5 +81,8 @@ public class User {
                 ", gender='" + gender + '\'' +
                 ", birthDate=" + birthDate +
                 '}';
+    }
+
+    public void setBirthDate(String birthdate) {
     }
 }

@@ -20,7 +20,7 @@ public class UserDao implements IUserDao{
            st.setString(3, user.getPassword());
            st.setString(4, user.getEmail());
            st.setString(5, user.getGender());
-           st.setDate(6,user.getBirthDate());
+           st.setDate(6, (java.sql.Date) user.getBirthDate());
 
         return false;
     }
@@ -62,26 +62,13 @@ public class UserDao implements IUserDao{
 
     @Override
     public User findById(Connection con, Integer id) throws SQLException {
-        String sql="select * from usertable where  id=?";
-        PreparedStatement st=con.prepareStatement(sql);
-        st.setInt(1,id);
-        ResultSet rs=st.executeQuery();
-        User user=null;
-        if (rs.next()){
-            user=new User();
-            user.setId(rs.getInt("id"));
-            user.setUsername(rs.getString("username"));
-            user.setPassword(rs.getString("password"));
-            user.setEmail(rs.getString("email"));
-            user.setGender(rs.getString("gender"));
-            user.setBirthDate(rs.getDate("birthdate"));
-        }
-        return user;
+        return null;
     }
+
 
     @Override
     public User findByUsernamePassword(Connection con, String username, String password) throws SQLException {
-        String sql="select * from usertable where username=? and password=?";
+        String sql="select username,password,email,gender,birthdate from usertable where username=? and password=?";
         PreparedStatement st=con.prepareStatement(sql);
         st.setString(1,username);
         st.setString(2,password);
@@ -89,7 +76,6 @@ public class UserDao implements IUserDao{
         User user=null;
         if(rs.next()) {
             user=new User();
-            user.setId(rs.getInt("id"));
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             user.setEmail(rs.getString("email"));
@@ -97,8 +83,8 @@ public class UserDao implements IUserDao{
             user.setBirthDate(rs.getDate("birthdate"));
 
         }
-
         return user;
+
     }
 
     @Override
