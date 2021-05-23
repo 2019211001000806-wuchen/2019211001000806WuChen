@@ -1,6 +1,7 @@
 package com.wuchen.controller;
 
 import com.wuchen.dao.ProductDao;
+import com.wuchen.model.Category;
 import com.wuchen.model.Product;
 
 import javax.servlet.*;
@@ -11,24 +12,33 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(name = "ProductListServlet", value = "/admin/productList")
-public class ProductListServlet extends HttpServlet {
+@WebServlet(name = "ProductDetailsServlet", value = "/productDetails")
+public class ProductDetailsServlet extends HttpServlet {
     Connection con=null;
-    @Override
     public void init() throws  ServletException{
         super.init();
         con=(Connection) getServletContext().getAttribute("con");
-
     }
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ProductDao productDao=new ProductDao();
+
         try {
-            List<Product> productList=productDao.findAll(con);
-            request.setAttribute("productList",productList);
+            List<Category> categoryList=Category.findAllCategory(con);
+            request.setAttribute("categoryList",categoryList);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        String path="WEB-INF/views/admin/productList.jsp";
+        try {
+        if(request.getParameter("id")!=null){
+            int productId=Integer.parseInt(request.getParameter("id"));
+        ProductDao productDao=new ProductDao();
+        Product product=productDao.findById(productId,con);
+        request.setAttribute("p",product);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String path="WEB-INF/views/productDetails.jsp";
         request.getRequestDispatcher(path).forward(request,response);
     }
 

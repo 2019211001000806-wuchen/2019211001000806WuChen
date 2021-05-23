@@ -1,6 +1,7 @@
 package com.wuchen.controller;
 
 import com.wuchen.dao.ProductDao;
+import com.wuchen.model.Category;
 import com.wuchen.model.Product;
 
 import javax.servlet.*;
@@ -9,26 +10,41 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 
-@WebServlet(name = "ProductListServlet", value = "/admin/productList")
-public class ProductListServlet extends HttpServlet {
+@WebServlet(name = "ShopServlet", value = "/shop")
+public class ShopServlet extends HttpServlet {
     Connection con=null;
-    @Override
     public void init() throws  ServletException{
         super.init();
         con=(Connection) getServletContext().getAttribute("con");
-
     }
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ProductDao productDao=new ProductDao();
+        Category category=new Category();
         try {
-            List<Product> productList=productDao.findAll(con);
-            request.setAttribute("productList",productList);
+            List<Category> categoryList=Category.findAllCategory(con);
+            request.setAttribute("categoryList",categoryList);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        String path="WEB-INF/views/admin/productList.jsp";
+        ProductDao productDao=new ProductDao();
+        List<Product> productList=null;
+        try {
+            if(request.getParameter("categoryId")==null){
+             productList=productDao.findAll(con);
+
+            }else {
+                int catId=Integer.parseInt(request.getParameter("categoryId"));
+                productList=productDao.findByCategoryId(catId,con);
+
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        request.setAttribute("productList",productList);
+        String path="WEB-INF/views/shop.jsp";
         request.getRequestDispatcher(path).forward(request,response);
     }
 
