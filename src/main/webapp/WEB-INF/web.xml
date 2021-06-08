@@ -57,6 +57,14 @@
             <filter-name>AuthFilter</filter-name>
             <url-pattern>/hello</url-pattern>
       </filter-mapping>
+      <filter>
+            <filter-name>WuChenFilter</filter-name>
+            <filter-class>com.lab2.WuChenFilter</filter-class>
+      </filter>
+      <filter-mapping>
+            <filter-name>WuChenFilter</filter-name>
+            <url-pattern>/lab2/welcome.jsp</url-pattern>
+      </filter-mapping>
       <!--<filter>
             <filter-name>HelloFilter</filter-name>
             <filter-class>com.wuchen.filter.HelloFilter</filter-class>
